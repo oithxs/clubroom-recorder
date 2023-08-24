@@ -35,8 +35,8 @@ def reg():
         return False
     
     # メアドがoit.ac.jp, *.oit.ac.jpでない場合は登録しない
-    chkmaildomain = mailaddr.split('@')
-    if not chkmaildomain[1].endswith('oit.ac.jp'):
+    maildomain = mailaddr.split('@')
+    if not maildomain[1].endswith('oit.ac.jp'):
         return False
     
     salt = bcrypt.gensalt()
