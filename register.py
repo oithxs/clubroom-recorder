@@ -1,13 +1,14 @@
-from flask import Blueprint
+from flask import Blueprint,request
 import sqlite3
 import bcrypt
 import os.path
 import datetime
+import json
 
 register = Blueprint('register', __name__)
 
 @register.route('/register', methods=['POST'])
-def reg(mailaddr, password, regip):
+def reg():
     # ユーザーのメールアドレスが既に登録されているかどうかを確認する
     conn = sqlite3.connect('user.db')
     c = conn.cursor()
@@ -17,6 +18,11 @@ def reg(mailaddr, password, regip):
 
     regdate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+    if 'X-Forwarded-For' in request.headers:
+        regip = request.headers.getlist('X-Forwarded-For')[0]
+    else:
+        regip = request.remote_addr
+    
     if result is not None:
         return False
     if len(password) < 8:
