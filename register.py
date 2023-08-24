@@ -2,17 +2,20 @@ from flask import Blueprint
 import sqlite3
 import bcrypt
 import os.path
+import datetime
 
 register = Blueprint('register', __name__)
 
 @register.route('/register', methods=['POST'])
-def reg(mailaddr, password, regip, regdate):
+def reg(mailaddr, password, regip):
     # ユーザーのメールアドレスが既に登録されているかどうかを確認する
     conn = sqlite3.connect('user.db')
     c = conn.cursor()
     c.execute('SELECT * FROM user WHERE mailaddr = ?', (mailaddr,))
     result = c.fetchone()
     conn.close()
+
+    regdate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     if result is not None:
         return False
