@@ -1,18 +1,11 @@
+from flask import Blueprint
 import sqlite3
 import bcrypt
 import os.path
 
-def create_sqlite3():
-    # データベースが存在しない場合は作成する
-    if not os.path.isfile('user.db'):
-        conn = sqlite3.connect('user.db')
-        c = conn.cursor()
-        # ログイン履歴は別テーブルに格納する
-        c.execute('CREATE TABLE user (mailaddr, password, salt, regdate, regip)')
-        c.execute('CREATE TABLE login_history (mailaddr, logindate, loginip)')
-        conn.commit()
-        conn.close()
+register = Blueprint('register', __name__)
 
+@register.route('/register', methods=['POST'])
 def reg(mailaddr, password, regip, regdate):
     # ユーザーのメールアドレスが既に登録されているかどうかを確認する
     conn = sqlite3.connect('user.db')
