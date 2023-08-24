@@ -25,6 +25,7 @@ def reg():
 
     postdata = request.get_json()
     mailaddr = postdata['mailaddr']
+    password = postdata['password']
     
     if result is not None:
         return False
