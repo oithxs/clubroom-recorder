@@ -22,6 +22,9 @@ def reg():
         regip = request.headers.getlist('X-Forwarded-For')[0]
     else:
         regip = request.remote_addr
+
+    postdata = request.get_json()
+    mailaddr = postdata['mailaddr']
     
     if result is not None:
         return False
