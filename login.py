@@ -37,5 +37,5 @@ def login():
         CRlogging.log(mailaddr, logindate, loginip, 'success')
         return jsonify({'result': 'success'}), 200
     else:
-        logging.log(mailaddr, logindate, loginip, 'failed, wrong password')
+        CRlogging.log(mailaddr, logindate, loginip, 'failed, wrong password')
         return jsonify({'result': 'failed', 'reason': 'user not found or wrong password'}), 401 
