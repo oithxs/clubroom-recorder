@@ -1,5 +1,4 @@
 from flask import Blueprint,request,jsonify
-# import CRlogging
 from app.lib import log
 import sqlite3
 import bcrypt
