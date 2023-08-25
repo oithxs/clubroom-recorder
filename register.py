@@ -7,6 +7,10 @@ register = Blueprint('register', __name__)
 
 @register.route('/register', methods=['POST'])
 def reg():
+    postdata = request.get_json()
+    mailaddr = postdata['mailaddr']
+    password = postdata['password']
+    
     # ユーザーのメールアドレスが既に登録されているかどうかを確認する
     conn = sqlite3.connect('user.db')
     c = conn.cursor()
@@ -20,10 +24,6 @@ def reg():
         regip = request.headers.getlist('X-Forwarded-For')[0]
     else:
         regip = request.remote_addr
-
-    postdata = request.get_json()
-    mailaddr = postdata['mailaddr']
-    password = postdata['password']
     
     if result is not None:
         return jsonify({'result': 'failed', 'reason': 'user already exists'}), 400
