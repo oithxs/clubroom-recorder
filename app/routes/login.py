@@ -1,10 +1,9 @@
-from flask import Blueprint,request
+from flask import Blueprint,request,jsonify
 # import CRlogging
 from app.lib import log
 import sqlite3
 import bcrypt
 import datetime
-import jsonify
 
 blueprint = Blueprint('login', __name__)
 
