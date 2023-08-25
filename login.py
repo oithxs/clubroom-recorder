@@ -2,7 +2,7 @@ from flask import Blueprint,request
 import sqlite3
 import bcrypt
 import datetime
-import logging
+import CRlogging
 
 login = Blueprint('login', __name__)
 
@@ -25,7 +25,7 @@ def login():
     conn.close()
     
     if result is None:
-        logging.log(mailaddr, logindate, loginip, 'failed, user not found')
+        CRlogging.log(mailaddr, logindate, loginip, 'failed, user not found')
         return False
     
     salt = result[2]
@@ -33,7 +33,7 @@ def login():
     password = bcrypt.hashpw(password, salt)
     
     if result[1] == password:
-        logging.log(mailaddr, logindate, loginip, 'success')
+        CRlogging.log(mailaddr, logindate, loginip, 'success')
         return True
     else:
         logging.log(mailaddr, logindate, loginip, 'failed, wrong password')
