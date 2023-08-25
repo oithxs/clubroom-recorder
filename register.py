@@ -1,8 +1,7 @@
-from flask import Blueprint,request
+from flask import Blueprint,request,jsonify
 import sqlite3
 import bcrypt
 import datetime
-import jsonify
 
 register = Blueprint('register', __name__)
 
