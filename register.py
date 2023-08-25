@@ -1,9 +1,8 @@
 from flask import Blueprint,request
 import sqlite3
 import bcrypt
-import os.path
 import datetime
-import json
+import jsonify
 
 register = Blueprint('register', __name__)
 
@@ -28,16 +27,16 @@ def reg():
     password = postdata['password']
     
     if result is not None:
-        return False
+        return jsonify({'result': 'failed', 'reason': 'user already exists'}), 400
     if len(password) < 8:
-        return False
+        return jsonify({'result': 'failed', 'reason': 'password is too short'}), 400
     if mailaddr == '' or password == '' or regip == '' or regdate == '':
-        return False
+        return jsonify({'result': 'failed', 'reason': 'invalid request'}), 400
     
     # メアドがoit.ac.jp, *.oit.ac.jpでない場合は登録しない
     maildomain = mailaddr.split('@')
     if not maildomain[1].endswith('oit.ac.jp'):
-        return False
+        return jsonify({'result': 'failed', 'reason': 'mail address domain is not authorized'}), 400
     
     salt = bcrypt.gensalt()
     password = salt + password.encode('utf-8')
@@ -49,3 +48,5 @@ def reg():
     c.execute('INSERT INTO user VALUES (?, ?, ?, ?, ?)', (mailaddr, password, salt, regdate, regip))
     conn.commit()
     conn.close()
+    
+    return jsonify({'result': 'success'}), 200

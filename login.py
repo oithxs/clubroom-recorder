@@ -3,6 +3,7 @@ import sqlite3
 import bcrypt
 import datetime
 import CRlogging
+import jsonify
 
 login = Blueprint('login', __name__)
 
@@ -26,7 +27,7 @@ def login():
     
     if result is None:
         CRlogging.log(mailaddr, logindate, loginip, 'failed, user not found')
-        return False
+        return jsonify({'result': 'failed', 'reason': 'user not found or wrong password'}), 401
     
     salt = result[2]
     password = salt + password.encode('utf-8')
@@ -34,7 +35,7 @@ def login():
     
     if result[1] == password:
         CRlogging.log(mailaddr, logindate, loginip, 'success')
-        return True
+        return jsonify({'result': 'success'}), 200
     else:
         logging.log(mailaddr, logindate, loginip, 'failed, wrong password')
-        return False
+        return jsonify({'result': 'failed', 'reason': 'user not found or wrong password'}), 401 
