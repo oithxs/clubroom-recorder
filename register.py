@@ -2,8 +2,10 @@ from flask import Blueprint,request,jsonify
 import sqlite3
 import bcrypt
 import datetime
+import dotenv
 
 register = Blueprint('register', __name__)
+dotenv.load_dotenv('.env')
 
 @register.route('/register', methods=['POST'])
 def reg():
@@ -32,9 +34,10 @@ def reg():
     if mailaddr == '' or password == '' or regip == '' or regdate == '':
         return jsonify({'result': 'failed', 'reason': 'invalid request'}), 400
     
-    # メアドがoit.ac.jp, *.oit.ac.jpでない場合は登録しない
+    # .envファイルのALLOW_MAIL_DOMAINに指定されたドメインとそのサブドメインのみ登録を許可する
+    allowmaildomain = dotenv.get('ALLOW_MAIL_DOMAIN')
     maildomain = mailaddr.split('@')
-    if not maildomain[1].endswith('oit.ac.jp'):
+    if not maildomain[1].endswith(allowmaildomain):
         return jsonify({'result': 'failed', 'reason': 'mail address domain is not authorized'}), 400
     
     salt = bcrypt.gensalt()
