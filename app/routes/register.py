@@ -23,7 +23,7 @@ def register():
 
     regdate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    if 'X-Forwarded-For' in request.headers:
+    if os.getenv('USE_REVERSE_PROXY') == 'true':
         regip = request.headers.getlist('X-Forwarded-For')[0]
     else:
         regip = request.remote_addr

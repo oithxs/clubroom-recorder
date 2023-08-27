@@ -3,8 +3,11 @@ from app.lib import log
 import sqlite3
 import bcrypt
 import datetime
+import os
+import dotenv
 
 blueprint = Blueprint('login', __name__)
+dotenv.load_dotenv('.env')
 
 @blueprint.route('/login', methods=['POST'])
 def login():
@@ -13,7 +16,7 @@ def login():
     password = postdata['password']
     logindate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    if 'X-Forwarded-For' in request.headers:
+    if os.getenv('USE_REVERSE_PROXY') == 'true':
         loginip = request.headers.getlist('X-Forwarded-For')[0]
     else:
         loginip = request.remote_addr
