@@ -28,7 +28,7 @@ def login():
     conn.close()
 
     if result is None:
-        log(mailaddr, logindate, loginip, 'failed, user not found')
+        log(mailaddr, logindate, loginip, '[login]failed, user not found')
         return jsonify({'result': 'failed', 'reason': 'user not found or wrong password'}), 401
 
     salt = result[2]
@@ -39,5 +39,5 @@ def login():
         log(mailaddr, logindate, loginip, 'success')
         return jsonify({'result': 'success'}), 200
     else:
-        log(mailaddr, logindate, loginip, 'failed, wrong password')
+        log(mailaddr, logindate, loginip, '[login]failed, wrong password')
         return jsonify({'result': 'failed', 'reason': 'user not found or wrong password'}), 401
